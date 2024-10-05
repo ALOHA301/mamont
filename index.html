@@ -51,11 +51,11 @@
         });
 
         // Таймер для автоматического получения GOYкоинов
-        setInterval(() => {
-            coins++; // Добавляем 1 GOYкоин каждые 5 секунд
-            document.getElementById('counter').textContent = `GOYкоины: ${coins}`; // Обновляем отображение
-            saveProgress(coins); // Сохраняем прогресс
-        }, 1000);
+setInterval(() => {
+    coins++; // Добавляем 1 GOYкоин каждую секунду
+    document.getElementById('counter').textContent = `GOYкоины: ${coins}`; // Обновляем отображение
+    saveProgress(coins); // Сохраняем прогресс
+}, 1000); // Изменили 5000 на 1000
 
         // Дополнительная проверка на загрузку в Telegram Web App
         if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
