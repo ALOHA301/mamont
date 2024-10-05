@@ -24,9 +24,9 @@
     </style>
 </head>
 <body>
-    <h1>Tap!Tap!Tap!</h1>
+    <h1>TAP!TAP!TAP!</h1>
     <div id="mammoth"></div>
-    <p id="counter">GOYкоины: 0</p>
+    <p id="counter">GOYDAcoins: 0</p>
 
     <script>
         // Функция для сохранения прогресса
@@ -51,11 +51,11 @@
         });
 
         // Таймер для автоматического получения GOYкоинов
-setInterval(() => {
-    coins++; // Добавляем 1 GOYкоин каждую секунду
-    document.getElementById('counter').textContent = `GOYкоины: ${coins}`; // Обновляем отображение
-    saveProgress(coins); // Сохраняем прогресс
-}, 1000); // Изменили 5000 на 1000
+        setInterval(() => {
+            coins++; // Добавляем 1 GOYкоин каждые 5 секунд
+            document.getElementById('counter').textContent = `GOYкоины: ${coins}`; // Обновляем отображение
+            saveProgress(coins); // Сохраняем прогресс
+        }, 1000);
 
         // Дополнительная проверка на загрузку в Telegram Web App
         if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
