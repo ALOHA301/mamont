@@ -29,12 +29,33 @@
     <p id="counter">GOYкоины: 0</p>
 
     <script>
-        let coins = 0;
+        // Функция для сохранения прогресса
+        function saveProgress(coins) {
+            localStorage.setItem('goyCoins', coins);
+        }
 
+        // Функция для загрузки прогресса
+        function loadProgress() {
+            return parseInt(localStorage.getItem('goyCoins')) || 0; // Возвращает 0, если нет сохраненного значения
+        }
+
+        // Загружаем прогресс при старте
+        let coins = loadProgress(); 
+        document.getElementById('counter').textContent = `GOYкоины: ${coins}`; // Обновляем отображение
+
+        // При нажатии на мамонта
         document.getElementById('mammoth').addEventListener('click', function() {
-            coins++;
-            document.getElementById('counter').textContent = `GOYкоины: ${coins}`;
+            coins++; // Увеличиваем количество GOYкоинов
+            document.getElementById('counter').textContent = `GOYкоины: ${coins}`; // Обновляем отображение
+            saveProgress(coins); // Сохраняем прогресс
         });
+
+        // Таймер для автоматического получения GOYкоинов
+        setInterval(() => {
+            coins++; // Добавляем 1 GOYкоин каждые 5 секунд
+            document.getElementById('counter').textContent = `GOYкоины: ${coins}`; // Обновляем отображение
+            saveProgress(coins); // Сохраняем прогресс
+        }, 5000);
     </script>
 </body>
 </html>
