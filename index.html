@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mammoth Tapper</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #mammoth {
+            width: 200px;
+            height: 200px;
+            background-image: url('https://i.ibb.co/L8673nB/2.jpg'); 
+            background-size: cover;
+            margin: 20px auto;
+            cursor: pointer;
+        }
+        #counter {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tap!Tap!Tap!</h1>
+    <div id="mammoth"></div>
+    <p id="counter">GOYкоины: 0</p>
+
+    <script>
+        let coins = 0;
+
+        document.getElementById('mammoth').addEventListener('click', function() {
+            coins++;
+            document.getElementById('counter').textContent = `GOYкоины: ${coins}`;
+        });
+    </script>
+</body>
+</html>
