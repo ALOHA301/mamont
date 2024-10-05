@@ -55,7 +55,14 @@
             coins++; // Добавляем 1 GOYкоин каждые 5 секунд
             document.getElementById('counter').textContent = `GOYкоины: ${coins}`; // Обновляем отображение
             saveProgress(coins); // Сохраняем прогресс
-        }, 5000);
+        }, 1000);
+
+        // Дополнительная проверка на загрузку в Telegram Web App
+        if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+            // Если Web App, можно задать какие-либо настройки
+            // Пример: настроить цвет фона или скрыть заголовок
+            document.body.style.backgroundColor = "#f0f0f0"; // Устанавливаем фон
+        }
     </script>
 </body>
 </html>
