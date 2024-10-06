@@ -7,7 +7,16 @@
     <style>
         body {
             text-align: center;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom right, #f0f8ff, #e0e0e0); /* Градиент фона */
+            color: #333; /* Цвет текста */
+            margin: 0; /* Убираем отступы по умолчанию */
+            padding: 20px; /* Отступы внутри body */
+        }
+        h1 {
+            font-size: 36px;
+            color: #4CAF50; /* Цвет заголовка */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Тень для заголовка */
         }
         #mammoth {
             width: 200px;
@@ -16,53 +25,164 @@
             background-size: cover;
             margin: 20px auto;
             cursor: pointer;
+            border-radius: 50%; /* Убедитесь, что изображение круглое */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* Тень вокруг мамонта */
+            outline: none; /* Убираем контур при фокусировке */
         }
         #counter {
-            font-size: 20px;
+            font-size: 24px; /* Размер текста для счётчика */
             margin-top: 10px;
+            font-weight: bold; /* Жирный текст */
+            color: #4CAF50; /* Цвет счётчика */
+        }
+        .upgrade {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #4CAF50; /* Зелёный цвет кнопки */
+            color: white; /* Цвет текста кнопки */
+            border: none; /* Убираем рамку */
+            padding: 10px 20px; /* Отступы */
+            text-align: center; /* Выравнивание текста по центру */
+            text-decoration: none; /* Убираем подчеркивание */
+            display: inline-block; /* Блочный элемент */
+            font-size: 16px; /* Размер шрифта */
+            margin: 4px 2px; /* Отступы между кнопками */
+            cursor: pointer; /* Указатель при наведении */
+            border-radius: 5px; /* Скругление углов */
+            transition: background-color 0.3s, transform 0.2s; /* Плавные переходы */
+        }
+        button:hover {
+            background-color: #45a049; /* Цвет кнопки при наведении */
+            transform: scale(1.05); /* Увеличение кнопки при наведении */
+        }
+        button:disabled {
+            background-color: #cccccc; /* Цвет для отключенной кнопки */
+            cursor: not-allowed; /* Курсор для отключенной кнопки */
+        }
+        #resetGame {
+            position: absolute; /* Абсолютное позиционирование */
+            top: 10px; /* Отступ сверху */
+            left: 10px; /* Отступ слева */
+            padding: 5px 10px; /* Уменьшенные отступы для маленькой кнопки */
+            font-size: 14px; /* Размер шрифта для кнопки */
+            background-color: #ff4444; /* Красный цвет для кнопки сброса */
+            border-radius: 5px; /* Скругление углов кнопки */
+            color: white; /* Цвет текста */
+            border: none; /* Убираем рамку */
+        }
+        #resetGame:hover {
+            background-color: #ff0000; /* Цвет кнопки сброса при наведении */
         }
     </style>
 </head>
 <body>
+    <button id="resetGame">Сбросить</button>
     <h1>TAP!TAP!TAP!</h1>
     <div id="mammoth"></div>
-    <p id="counter">GOYDAcoins: 0</p>
+    <p id="counter">GOYDAкоины: 0</p>
+
+    <div class="upgrade">
+        <button id="upgradeTap">Улучшить тап: 50 GOYDAкоинов</button>
+        <p id="tapPower">Текущая мощность тапа: 1 GOYDAкоин</p>
+    </div>
+
+    <div class="upgrade">
+        <button id="upgradeAuto">Улучшить прибыль в секунду: 100 GOYDAкоинов</button>
+        <p id="autoPower">Текущая прибыль в секунду: 1 GOYDAкоин/сек</p>
+    </div>
 
     <script>
-        // Функция для сохранения прогресса
-        function saveProgress(coins) {
+        // Инициализация переменных
+        let coins = 0;
+        let tapPower = 1; // Мощность одного тапа
+        let autoPower = 1; // Мощность автоматического начисления коинов
+        let autoCost = 100; // Цена на улучшение автогенерации
+        let tapCost = 50; // Цена на улучшение тапа
+
+        // Сохранение и загрузка прогресса
+        function saveProgress() {
             localStorage.setItem('goyCoins', coins);
+            localStorage.setItem('tapPower', tapPower);
+            localStorage.setItem('autoPower', autoPower);
+            localStorage.setItem('tapCost', tapCost);
+            localStorage.setItem('autoCost', autoCost);
         }
 
-        // Функция для загрузки прогресса
         function loadProgress() {
-            return parseInt(localStorage.getItem('goyCoins')) || 0; // Возвращает 0, если нет сохраненного значения
+            coins = parseInt(localStorage.getItem('goyCoins')) || 0;
+            tapPower = parseInt(localStorage.getItem('tapPower')) || 1;
+            autoPower = parseInt(localStorage.getItem('autoPower')) || 1;
+            tapCost = parseInt(localStorage.getItem('tapCost')) || 50;
+            autoCost = parseInt(localStorage.getItem('autoCost')) || 100;
+
+            // Обновляем текст кнопок с ценами улучшений
+            document.getElementById('upgradeTap').textContent = `Улучшить тап (Цена: ${tapCost} GOYDAкоинов)`;
+            document.getElementById('upgradeAuto').textContent = `Улучшить прибыль в секунду (Цена: ${autoCost} GOYDAкоинов)`;
         }
 
         // Загружаем прогресс при старте
-        let coins = loadProgress(); 
-        document.getElementById('counter').textContent = `GOYDAкоины: ${coins}`; // Обновляем отображение
+        loadProgress();
+        document.getElementById('counter').textContent = `GOYDAкоины: ${coins}`;
+        document.getElementById('tapPower').textContent = `Текущая мощность тапа: ${tapPower} GOYDAкоин`;
+        document.getElementById('autoPower').textContent = `Текущая прибыль в секунду: ${autoPower} GOYDAкоин/сек`;
 
-        // При нажатии на мамонта
+        // Обработчик клика по мамонту
         document.getElementById('mammoth').addEventListener('click', function() {
-            coins++; // Увеличиваем количество GOYкоинов
-            document.getElementById('counter').textContent = `GOYDAкоины: ${coins}`; // Обновляем отображение
-            saveProgress(coins); // Сохраняем прогресс
+            coins += tapPower; // Увеличиваем количество GOYDAкоинов на мощность тапа
+            document.getElementById('counter').textContent = `GOYDAкоины: ${coins}`;
+            saveProgress(); // Сохраняем прогресс
         });
 
-        // Таймер для автоматического получения GOYкоинов
+        // Таймер для автоматического получения GOYDAкоинов
         setInterval(() => {
-            coins++; // Добавляем 1 GOYкоин каждые 5 секунд
-            document.getElementById('counter').textContent = `GOYDAкоины: ${coins}`; // Обновляем отображение
-            saveProgress(coins); // Сохраняем прогресс
+            coins += autoPower; // Добавляем GOYDAкоины по автогенерации
+            document.getElementById('counter').textContent = `GOYDAкоины: ${coins}`;
+            saveProgress(); // Сохраняем прогресс
         }, 1000);
 
-        // Дополнительная проверка на загрузку в Telegram Web App
-        if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-            // Если Web App, можно задать какие-либо настройки
-            // Пример: настроить цвет фона или скрыть заголовок
-            document.body.style.backgroundColor = "#f0f0f0"; // Устанавливаем фон
-        }
+        // Улучшение тапа
+        document.getElementById('upgradeTap').addEventListener('click', function() {
+            if (coins >= tapCost) {
+                coins -= tapCost;
+                tapPower++; // Увеличиваем мощность тапа
+                tapCost = Math.floor(tapCost * 1.5); // Увеличиваем цену улучшения (на 50%)
+                document.getElementById('tapPower').textContent = `Текущая мощность тапа: ${tapPower} GOYDAкоин`;
+                document.getElementById('upgradeTap').textContent = `Улучшить тап (Цена: ${tapCost} GOYDAкоинов)`;
+                document.getElementById('counter').textContent = `GOYDAкоины: ${coins}`;
+                saveProgress(); // Сохраняем прогресс
+            }
+        });
+
+        // Улучшение автогенерации
+        document.getElementById('upgradeAuto').addEventListener('click', function() {
+            if (coins >= autoCost) {
+                coins -= autoCost;
+                autoPower++; // Увеличиваем скорость автогенерации
+                autoCost = Math.floor(autoCost * 1.7); // Увеличиваем цену улучшения (на 70%)
+                document.getElementById('autoPower').textContent = `Текущая прибыль в секунду: ${autoPower} GOYDAкоин/сек`;
+                document.getElementById('upgradeAuto').textContent = `Улучшить прибыль в секунду (Цена: ${autoCost} GOYDAкоинов)`;
+                document.getElementById('counter').textContent = `GOYDAкоины: ${coins}`;
+                saveProgress(); // Сохраняем прогресс
+            }
+        });
+
+        // Сброс прогресса
+        document.getElementById('resetGame').addEventListener('click', function() {
+            if (confirm("Вы уверены, что хотите сбросить прогресс?")) {
+                localStorage.clear(); // Очистка хранилища
+                coins = 0; // Сброс количества коинов
+                tapPower = 1; // Сброс мощности тапа
+                autoPower = 1; // Сброс автогенерации
+                tapCost = 50; // Сброс цены на улучшение тапа
+                autoCost = 100; // Сброс цены на улучшение автогенерации
+                document.getElementById('counter').textContent = `GOYDAкоины: ${coins}`;
+                document.getElementById('tapPower').textContent = `Текущая мощность тапа: ${tapPower} GOYDAкоин`;
+                document.getElementById('autoPower').textContent = `Текущая прибыль в секунду: ${autoPower} GOYDAкоин/сек`;
+                document.getElementById('upgradeTap').textContent = `Улучшить тап (Цена: ${tapCost} GOYDAкоинов)`;
+                document.getElementById('upgradeAuto').textContent = `Улучшить прибыль в секунду (Цена: ${autoCost} GOYDAкоинов)`;
+            }
+        });
     </script>
 </body>
 </html>
